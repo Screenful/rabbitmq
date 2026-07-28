@@ -10,13 +10,7 @@ echo "Queue monitor started"
 check_queues() {
   output="$(rabbitmqctl list_queues -q name messages 2>/dev/null || true)"
 
-  if [ -z "$output" ]; then
-    echo "Queue monitor: no queue data available"
-    return
-  fi
-
   queue_count="$(printf '%s\n' "$output" | sed '/^$/d' | wc -l | tr -d ' ')"
-  echo "Queue monitor: queue count=${queue_count}"
 
   printf '%s\n' "$output" | while IFS='\t' read -r queue_name queue_length; do
     queue_name="${queue_name:-}"
@@ -32,12 +26,13 @@ check_queues() {
       echo "SERROR Queue '${queue_name}' has ${queue_length} items (threshold=${THRESHOLD})"
     fi
   done
+
+  echo "Queue monitor: check successfully finished (queue count=${queue_count})"
 }
 
 sleep "$INITIAL_DELAY_SECONDS"
 
 while true; do
   check_queues
-  echo "Queue monitor: check successfully finished"
   sleep "$INTERVAL_SECONDS"
 done

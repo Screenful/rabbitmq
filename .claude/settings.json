@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "screenful": {
+      "source": {
+        "source": "github",
+        "repo": "Screenful/screenful-agents"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "screenful@screenful": true
+  }
+}
